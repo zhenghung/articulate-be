@@ -2,6 +2,7 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const cors = require('cors');
+const shortid = require('shortid');
 
 const { addPlayer, removePlayer, getPlayer, getPlayersInRoom } = require('./players');
 
@@ -15,6 +16,25 @@ app.use(cors());
 app.use(router);
 
 io.on('connect', (socket) => {
+
+  socket.on('createRoom',({}, callback) => {
+    const roomCode = shortid.generate();
+    socket.emit('roomCreated', roomCode);
+    callback();
+  });
+
+  socket.on('setName',({ playerName }, callback) => {
+    console.log(playerName);
+    //TODO emit to everyone
+    callback();
+  });
+
+  socket.on('setNumberOfTeams',({ numberOfTeams }, callback) => {
+    console.log(numberOfTeams);
+    //TODO emit to everyone
+    callback();
+  });
+
   socket.on('join', ({ name, room }, callback) => {
     const { error, player } = addPlayer({ id: socket.id, name, room });
 
