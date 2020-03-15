@@ -2,8 +2,6 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const cors = require('cors');
-const shortid = require('shortid');
-
 const { addPlayer, removePlayer, getPlayer, getPlayersInRoom } = require('./players');
 
 const router = require('./router');
@@ -13,27 +11,34 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 app.use(cors());
+app.use(express.json());
 app.use(router);
 
 io.on('connect', (socket) => {
 
-  socket.on('createRoom',({}, callback) => {
-    const roomCode = shortid.generate();
-    socket.emit('roomCreated', roomCode);
+  socket.on('getSocketId',({} , callback) => {
+    socket.emit('socketId', { socketId: socket.id});
     callback();
   });
 
-  socket.on('setName',({ playerName }, callback) => {
-    console.log(playerName);
-    //TODO emit to everyone
+  socket.on('connectSocket',(gameState , callback) => {
+    console.log(gameState);
+    socket.join(gameState.roomCode);
+    socket.broadcast.to(gameState.roomCode).emit('socketConnected', gameState);
     callback();
   });
 
-  socket.on('setNumberOfTeams',({ numberOfTeams }, callback) => {
-    console.log(numberOfTeams);
-    //TODO emit to everyone
+  socket.on('joinRoom',({ playerName, socketId, roomCode }, callback) => {
+    console.log("JOINING ROOM");
+    socket.join(roomCode);
+    socket.broadcast.to(roomCode).emit('playerJoined', { playerName, socketId });
     callback();
   });
+  socket.on('broadcastGameState', (gameState, error) => {
+    console.log("BROADCASTING GAME STATE");
+    socket.to(gameState.roomCode).emit('broadcastGameState', gameState);
+  });
+
 
   socket.on('join', ({ name, room }, callback) => {
     const { error, player } = addPlayer({ id: socket.id, name, room });
