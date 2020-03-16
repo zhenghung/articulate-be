@@ -11,16 +11,17 @@ const generateGameState = (
     ) => {
   // const roomCode = shortid.generate();
   const roomCode = getRandomInt(100,999).toString();
+  let teams = [];
+  for (let i = 0 ; i < numberOfTeams ; i++ ) {
+    teams.push([])
+  }
+  teams[0].push({ playerName: host.playerName, socketId: host.socketId })
   return {
     roomCode: roomCode,
     hostName: host.playerName,
     numberOfTeams: numberOfTeams,
     currentState: "lobby",
-    teams: [
-      [
-        { playerName: host.playerName, socketId: host.socketId }
-      ]
-    ]
+    teams: teams
   }
 };
 
