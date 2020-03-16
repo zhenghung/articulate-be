@@ -1,9 +1,16 @@
 const shortid = require('shortid');
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
+
 const generateGameState = (
     { host, numberOfTeams}
     ) => {
-  const roomCode = shortid.generate();
+  // const roomCode = shortid.generate();
+  const roomCode = getRandomInt(100,999).toString();
   return {
     roomCode: roomCode,
     hostName: host.playerName,

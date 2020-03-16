@@ -21,22 +21,21 @@ io.on('connect', (socket) => {
     callback();
   });
 
-  socket.on('connectSocket',(gameState , callback) => {
-    console.log(gameState);
-    socket.join(gameState.roomCode);
-    socket.broadcast.to(gameState.roomCode).emit('socketConnected', gameState);
-    callback();
-  });
-
   socket.on('joinRoom',({ playerName, socketId, roomCode }, callback) => {
-    console.log("JOINING ROOM");
+    console.log("JOINING ROOM: ", { playerName, socketId, roomCode });
     socket.join(roomCode);
     socket.broadcast.to(roomCode).emit('playerJoined', { playerName, socketId });
     callback();
   });
-  socket.on('broadcastGameState', (gameState, error) => {
-    console.log("BROADCASTING GAME STATE");
-    socket.to(gameState.roomCode).emit('broadcastGameState', gameState);
+
+
+  socket.on('broadcastGameState', (gameState, callback) => {
+    console.log(gameState);
+    if (gameState.hasOwnProperty("roomCode")) {
+      console.log("BROADCASTING GAME STATE: ", gameState.roomCode);
+      socket.broadcast.to(gameState.roomCode).emit('updateGameState', gameState);
+    }
+    callback();
   });
 
 
