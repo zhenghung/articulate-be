@@ -2,7 +2,6 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const cors = require('cors');
-const { addPlayer, removePlayer, getPlayer, getPlayersInRoom } = require('./players');
 
 const router = require('./router');
 
@@ -16,11 +15,15 @@ app.use(router);
 
 io.on('connect', (socket) => {
 
+  /** Client requesting a SocketId,
+   * sent back to client*/
   socket.on('getSocketId',({} , callback) => {
     socket.emit('socketId', { socketId: socket.id});
     callback();
   });
 
+  /** Client requesting to join a room,
+   * sends to everyone in the room*/
   socket.on('joinRoom',({ playerName, socketId, roomCode }, callback) => {
     console.log("JOINING ROOM: ", { playerName, socketId, roomCode });
     socket.join(roomCode);
@@ -28,7 +31,8 @@ io.on('connect', (socket) => {
     callback();
   });
 
-
+  /** Client broadcasting their gameState,
+   * sends to everyone else in the same room*/
   socket.on('broadcastGameState', (gameState, callback) => {
     console.log(gameState);
     if (gameState.hasOwnProperty("roomCode")) {
@@ -37,39 +41,6 @@ io.on('connect', (socket) => {
     }
     callback();
   });
-
-
-  socket.on('join', ({ name, room }, callback) => {
-    const { error, player } = addPlayer({ id: socket.id, name, room });
-
-    if(error) return callback(error);
-
-    socket.join(player.room);
-
-    socket.emit('message', { user: 'admin', text: `${player.name}, welcome to room ${player.room}.`});
-    socket.broadcast.to(player.room).emit('message', { user: 'admin', text: `${player.name} has joined!` });
-
-    io.to(player.room).emit('roomData', { room: player.room, users: getPlayersInRoom(player.room) });
-
-    callback();
-  });
-
-  socket.on('sendMessage', (message, callback) => {
-    const player = getPlayer(socket.id);
-
-    io.to(player.room).emit('message', { user: player.name, text: message });
-
-    callback();
-  });
-
-  socket.on('disconnect', () => {
-    const player = removePlayer(socket.id);
-
-    if(player) {
-      io.to(player.room).emit('message', { user: 'Admin', text: `${player.name} has left.` });
-      io.to(player.room).emit('roomData', { room: player.room, users: getPlayersInRoom(player.room)});
-    }
-  })
 });
 
 server.listen(process.env.PORT || 5000, () => console.log(`Server has started.`));

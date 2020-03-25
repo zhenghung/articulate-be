@@ -1,16 +1,19 @@
 const shortid = require('shortid');
+const { RandomInt } = require('./util');
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-}
 
-const generateGameState = (
+/**
+ * Generates a starting boilerplate gameState based on the parameters passed in
+ * Called when the host creates a room
+ * @param host
+ * @param numberOfTeams
+ * @returns {{currentTurn: {phase: string, describer: [], guesser: [], team: number, category: string, word: string}, hostName: *, teams: [], roomCode: *, gamePositions: [], numberOfTeams: *, currentState: string}}
+ */
+const GenerateGameState = (
     { host, numberOfTeams}
     ) => {
   // const roomCode = shortid.generate();
-  const roomCode = getRandomInt(100,999).toString();
+  const roomCode = RandomInt(100,999).toString();
   let teams = [];
   for (let i = 0 ; i < numberOfTeams ; i++ ) {
     teams.push([])
@@ -42,11 +45,4 @@ const generateGameState = (
   }
 };
 
-const generateCurrentTurn = (gameState) => {
-  return {
-    ...gameState
-  }
-};
-
-
-module.exports = { generateGameState, generateCurrentTurn };
+module.exports = { GenerateGameState };
