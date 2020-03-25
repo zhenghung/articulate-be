@@ -15,14 +15,38 @@ const generateGameState = (
   for (let i = 0 ; i < numberOfTeams ; i++ ) {
     teams.push([])
   }
-  teams[0].push({ playerName: host.playerName, socketId: host.socketId })
+  teams[0].push({ playerName: host.playerName, socketId: host.socketId });
+
+  const gamePositions = [];
+  for(let i = 0; i < numberOfTeams; i++) {
+    gamePositions.push(0);
+  }
+
+  const currentTurn = {
+    phase: "planning",
+    team: 0,
+    category: "Object",
+    word: "",
+    describer: [],
+    guesser: []
+  };
+
   return {
     roomCode: roomCode,
     hostName: host.playerName,
     numberOfTeams: numberOfTeams,
     currentState: "lobby",
-    teams: teams
+    teams: teams,
+    currentTurn,
+    gamePositions
   }
 };
 
-module.exports = { generateGameState };
+const generateCurrentTurn = (gameState) => {
+  return {
+    ...gameState
+  }
+};
+
+
+module.exports = { generateGameState, generateCurrentTurn };

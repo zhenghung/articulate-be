@@ -3,7 +3,7 @@ const shortid = require('shortid');
 const router = express.Router();
 
 const { words } = require('./dictionary');
-const { generateGameState } = require('./gamemanager');
+const { generateGameState, randomProperty } = require('./gamemanager');
 
 router.get("/", (req, res) => {
   res.send({ response: "Server is up and running." }).status(200);
@@ -19,8 +19,13 @@ router.post("/roomcreate", (req, res) => {
   res.send(gameState).status(200);
 });
 
-router.get("/word/:category", (req, res) => {
-  const listOfWords = words[req.params.category];
+router.post("/word/:category", (req, res) => {
+  let listOfWords;
+  if (req.params.category === "all") {
+    listOfWords = randomProperty(words);
+  } else {
+    listOfWords = words[req.params.category];
+  }
   const word = listOfWords[Math.floor(Math.random() * listOfWords.length)];
   res.send(word).status(200);
 });
