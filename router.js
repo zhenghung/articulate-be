@@ -28,4 +28,9 @@ router.get("/word/:category", (req, res) => {
   res.send(word).status(200);
 });
 
+/** Download all words */
+router.get("/allwords", (req, res) => {
+  res.send(words).status(200);
+});
+
 module.exports = router;
