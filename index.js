@@ -27,7 +27,7 @@ io.on('connect', (socket) => {
   socket.on('joinRoom',({ playerName, socketId, roomCode }, callback) => {
     console.log("JOINING ROOM: ", { playerName, socketId, roomCode });
     socket.join(roomCode);
-    socket.broadcast.to(roomCode).emit('playerJoined', { playerName, socketId });
+    socket.to(roomCode).emit('playerJoined', { playerName, socketId });
     callback();
   });
 
@@ -37,7 +37,7 @@ io.on('connect', (socket) => {
     console.log(gameState);
     if (gameState.hasOwnProperty("roomCode")) {
       console.log("BROADCASTING GAME STATE: ", gameState.roomCode);
-      socket.broadcast.to(gameState.roomCode).emit('updateGameState', gameState);
+      socket.to(gameState.roomCode).emit('updateGameState', gameState);
     }
     callback();
   });
