@@ -2,7 +2,7 @@
 
 To add words, commit to the dictonary.js file
 
-Note: Make sure the word added is not already added to the list 
+Note: Make sure the word added is not already in the list 
 
 ```angular2
 const words = {
