@@ -24,12 +24,18 @@ io.on('connect', (socket) => {
 
     /** Client requesting to join a room,
      * sends to everyone in the room*/
-    socket.on('joinRoom', ({playerName, socketId, roomCode}, callback) => {
-        console.log('JOINING ROOM: ', {playerName, socketId, roomCode});
-        socket.join(roomCode);
-        socket.to(roomCode).emit('playerJoined', {playerName, socketId});
-        callback();
-    });
+    socket.on('joinRoom',
+        ({isHost, playerName, socketId, roomCode}, callback) => {
+            console.log('JOINING ROOM: ', {playerName, socketId, roomCode});
+            socket.join(roomCode);
+            if (!isHost && io.sockets.adapter.rooms[roomCode].length < 2) {
+                socket.leave(roomCode);
+                socket.emit('playerJoinedFailed', {playerName, socketId});
+            } else {
+                socket.to(roomCode).emit('playerJoined', {playerName, socketId});
+            }
+            callback();
+        });
 
     /** Client broadcasting their gameState,
      * sends to everyone else in the same room*/
