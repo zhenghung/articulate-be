@@ -1,6 +1,5 @@
 const shortid = require('shortid');
-const { RandomInt } = require('./util');
-
+const {RandomInt} = require('./util');
 
 /**
  * Generates a starting boilerplate gameState based on the parameters passed in
@@ -10,39 +9,39 @@ const { RandomInt } = require('./util');
  * @returns {{currentTurn: {phase: string, describer: [], guesser: [], team: number, category: string, word: string}, hostName: *, teams: [], roomCode: *, gamePositions: [], numberOfTeams: *, currentState: string}}
  */
 const GenerateGameState = (
-    { host, numberOfTeams}
-    ) => {
-  // const roomCode = shortid.generate();
-  const roomCode = RandomInt(100,999).toString();
-  let teams = [];
-  for (let i = 0 ; i < numberOfTeams ; i++ ) {
-    teams.push([])
-  }
-  teams[0].push({ playerName: host.playerName, socketId: host.socketId });
+    {host, numberOfTeams},
+) => {
+    // const roomCode = shortid.generate();
+    const roomCode = RandomInt(100, 999).toString();
+    let teams = [];
+    for (let i = 0; i < numberOfTeams; i++) {
+        teams.push([]);
+    }
+    teams[0].push({playerName: host.playerName, socketId: host.socketId});
 
-  const gamePositions = [];
-  for(let i = 0; i < numberOfTeams; i++) {
-    gamePositions.push(0);
-  }
+    const gamePositions = [];
+    for (let i = 0; i < numberOfTeams; i++) {
+        gamePositions.push(0);
+    }
 
-  const currentTurn = {
-    phase: "planning",
-    team: 0,
-    category: "Object",
-    word: "",
-    describer: [],
-    guesser: []
-  };
+    const currentTurn = {
+        phase: 'planning',
+        team: 0,
+        category: 'Object',
+        word: '',
+        describer: [],
+        guesser: [],
+    };
 
-  return {
-    roomCode: roomCode,
-    hostName: host.playerName,
-    numberOfTeams: numberOfTeams,
-    currentState: "lobby",
-    teams: teams,
-    currentTurn,
-    gamePositions
-  }
+    return {
+        roomCode: roomCode,
+        hostName: host.playerName,
+        numberOfTeams: numberOfTeams,
+        currentState: 'lobby',
+        teams: teams,
+        currentTurn,
+        gamePositions,
+    };
 };
 
-module.exports = { GenerateGameState };
+module.exports = {GenerateGameState};
