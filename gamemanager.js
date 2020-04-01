@@ -33,12 +33,22 @@ const GenerateGameState = (
         guesser: [],
     };
 
+    const usedWords = {
+        object: [],
+        action: [],
+        nature: [],
+        world: [],
+        person: [],
+        random: []
+    };
+
     return {
         roomCode: roomCode,
         hostName: host.playerName,
         numberOfTeams: numberOfTeams,
         currentState: 'lobby',
         teams: teams,
+        usedWords,
         currentTurn,
         gamePositions,
     };
