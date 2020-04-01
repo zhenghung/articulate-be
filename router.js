@@ -2,8 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 const {words} = require('./dictionary');
-const {RandomProperty} = require('./util');
+const {RandomProperty, FilterDictionary} = require('./util');
 const {GenerateGameState} = require('./gamemanager');
+
+function RandomWord(category, vocabulary) {
+    let listOfWords;
+    if (category === 'all') {
+        listOfWords = RandomProperty(vocabulary);
+    } else {
+        listOfWords = vocabulary[category];
+    }
+    return listOfWords[Math.floor(Math.random() * listOfWords.length)];
+}
 
 /** Check if server is running*/
 router.get('/', (req, res) => {
@@ -18,14 +28,19 @@ router.post('/roomcreate', (req, res) => {
 
 /** Get a Random word for a given category*/
 router.get('/word/:category', (req, res) => {
-    let listOfWords;
-    if (req.params.category === 'all') {
-        listOfWords = RandomProperty(words);
-    } else {
-        listOfWords = words[req.params.category];
-    }
-    const word = listOfWords[Math.floor(Math.random() * listOfWords.length)];
+    const word = RandomWord(req.params.category, words);
     res.send(word).status(200);
+});
+
+/** Get a Random word given used words */
+router.post('/word/:category', (req, res) => {
+    const filteredWords = FilterDictionary(words, req.body);
+    const word = RandomWord(req.params.category, filteredWords);
+    if (word) {
+        res.send(word).status(200);
+    } else {
+        res.status(404).send(new Error('No Word Found'));
+    }
 });
 
 /** Download all words */
