@@ -27,7 +27,7 @@ const GenerateGameState = (
     const currentTurn = {
         phase: 'planning',
         team: 0,
-        category: 'Object',
+        category: 'object',
         word: '',
         describer: [],
         guesser: [],
