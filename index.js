@@ -28,11 +28,12 @@ io.on('connect', (socket) => {
         ({isHost, playerName, socketId, roomCode}, callback) => {
             console.log('JOINING ROOM: ', {playerName, socketId, roomCode});
             socket.join(roomCode);
+            socket.emit('socketId', {socketId: socket.id});
             if (!isHost && io.sockets.adapter.rooms[roomCode].length < 2) {
                 socket.leave(roomCode);
-                socket.emit('playerJoinedFailed', {playerName, socketId});
+                socket.emit('playerJoinedFailed', {playerName, socketId: socket.id, message: "Invalid Room"});
             } else {
-                socket.to(roomCode).emit('playerJoined', {playerName, socketId});
+                io.in(roomCode).emit('playerJoined', {playerName, socketId: socket.id});
             }
             callback();
         });
@@ -49,5 +50,4 @@ io.on('connect', (socket) => {
     });
 });
 
-server.listen(process.env.PORT || 5000,
-    () => console.log(`Server has started.`));
+server.listen(process.env.PORT || 5000,() => console.log(`Server has started.`));

@@ -6,7 +6,7 @@ const {RandomInt} = require('./util');
  * Called when the host creates a room
  * @param host
  * @param numberOfTeams
- * @returns {{currentTurn: {phase: string, describer: [], guesser: [], team: number, category: string, word: string}, hostName: *, teams: [], roomCode: *, gamePositions: [], numberOfTeams: *, currentState: string}}
+ * @returns {{currentTurn: {phase: string, describer: [], guesser: [], team: number, category: string, word: string}, hostName: *, teams: [], usedWords: {random: [], world: [], nature: [], person: [], action: [], object: []}, roomCode: *, gamePositions: [], numberOfTeams: *, currentState: string}}
  */
 const GenerateGameState = (
     {host, numberOfTeams},
@@ -39,7 +39,7 @@ const GenerateGameState = (
         nature: [],
         world: [],
         person: [],
-        random: []
+        random: [],
     };
 
     return {
