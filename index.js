@@ -48,6 +48,16 @@ io.on('connect', (socket) => {
         }
         callback();
     });
+
+    /** Client presses correct or skip during game,
+     * sends to everyone else in the same room*/
+    socket.on('broadcastToast', (toastObject, callback) => {
+        if (toastObject.hasOwnProperty('roomCode')) {
+            socket.to(toastObject.roomCode).emit('getToast', toastObject);
+        }
+        callback();
+    });
+
 });
 
 server.listen(process.env.PORT || 5000,() => console.log(`Server has started.`));
