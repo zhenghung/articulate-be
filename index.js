@@ -33,10 +33,23 @@ io.on('connect', (socket) => {
                 socket.leave(roomCode);
                 socket.emit('playerJoinedFailed', {playerName, socketId: socket.id, message: "Invalid Room"});
             } else {
-                io.in(roomCode).emit('playerJoined', {playerName, socketId: socket.id});
+                io.in(roomCode).emit('playerJoined', {isHost, playerName, socketId: socket.id});
             }
             callback();
         });
+
+    /** Host rejects player joining,
+     * Sends to everyone in the room but only acted upon by target player*/
+    socket.on('rejectPlayer', ({roomCode, playerName}, callback) => {
+        socket.to(roomCode).emit('playerRejected', {roomCode, playerName});
+        callback();
+    });
+
+    /** Rejected player leaves room*/
+    socket.on('leaveRoom', (roomCode, callback) => {
+        socket.leave(roomCode);
+        callback();
+    });
 
     /** Client broadcasting their gameState,
      * sends to everyone else in the same room*/
