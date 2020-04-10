@@ -48,9 +48,10 @@ const GenerateGameState = (
         numberOfTeams: numberOfTeams,
         currentState: 'lobby',
         teams: teams,
+        turns: 0,
         usedWords,
         currentTurn,
-        gamePositions,
+        gamePositions
     };
 };
 
