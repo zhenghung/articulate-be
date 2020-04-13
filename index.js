@@ -16,14 +16,14 @@ app.use(router);
 io.on('connect', (socket) => {
 
     /** Client requesting a SocketId,
-     * sent back to client*/
+     * sent back to client */
     socket.on('getSocketId', ({}, callback) => {
         socket.emit('socketId', {socketId: socket.id});
         callback();
     });
 
     /** Client requesting to join a room,
-     * sends to everyone in the room*/
+     * sends to everyone in the room */
     socket.on('joinRoom',
         ({isHost, playerName, socketId, roomCode}, callback) => {
             console.log('JOINING ROOM: ', {playerName, socketId, roomCode});
@@ -39,22 +39,22 @@ io.on('connect', (socket) => {
         });
 
     /** Host rejects player joining,
-     * Sends to everyone in the room but only acted upon by target player*/
+     * Sends to everyone in the room but only acted upon by target player */
     socket.on('rejectPlayer', ({roomCode, playerName}, callback) => {
         socket.to(roomCode).emit('playerRejected', {roomCode, playerName});
         callback();
     });
 
-    /** Rejected player leaves room*/
+    /** Rejected player leaves room */
     socket.on('leaveRoom', (roomCode, callback) => {
         socket.leave(roomCode);
         callback();
     });
 
     /** Client broadcasting their gameState,
-     * sends to everyone else in the same room*/
+     * sends to everyone else in the same room */
     socket.on('broadcastGameState', (gameState, callback) => {
-        console.log(gameState);
+        // console.log(gameState);
         if (gameState.hasOwnProperty('roomCode')) {
             console.log('BROADCASTING GAME STATE: ', gameState.roomCode);
             socket.to(gameState.roomCode).emit('updateGameState', gameState);
@@ -63,7 +63,7 @@ io.on('connect', (socket) => {
     });
 
     /** Client presses correct or skip during game,
-     * sends to everyone else in the same room*/
+     * sends to everyone else in the same room */
     socket.on('broadcastToast', (toastObject, callback) => {
         if (toastObject.hasOwnProperty('roomCode')) {
             socket.to(toastObject.roomCode).emit('getToast', toastObject);
@@ -71,6 +71,10 @@ io.on('connect', (socket) => {
         callback();
     });
 
+    /** Standard socket listeners for handling disconnections */
+    socket.on('connect_timeout', () => console.log("Connect Timeout"));
+    socket.on('connect_error', () => console.log("Connect Error"));
+    socket.on("disconnect", () => console.log("Client disconnected"));
 });
 
 server.listen(process.env.PORT || 5000,() => console.log(`Server has started.`));
