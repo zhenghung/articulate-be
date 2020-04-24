@@ -17,7 +17,7 @@ const GenerateGameState = (
     for (let i = 0; i < numberOfTeams; i++) {
         teams.push([]);
     }
-    teams[0].push({playerName: host.playerName, socketId: host.socketId});
+    teams[0].push({playerName: host.playerName, id: host.socketId});
 
     const gamePositions = [];
     for (let i = 0; i < numberOfTeams; i++) {
