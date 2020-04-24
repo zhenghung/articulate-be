@@ -31,7 +31,7 @@ io.on('connect', (socket) => {
             socket.emit('socketId', {socketId: socket.id});
             if (!isHost && io.sockets.adapter.rooms[roomCode].length < 2) {
                 socket.leave(roomCode);
-                socket.emit('playerJoinedFailed', {playerName, socketId: socket.id, message: "Invalid Room"});
+                socket.emit('playerJoinedFailed', {playerName, message: "Invalid Room"});
             } else {
                 io.in(roomCode).emit('playerJoined', {isHost, playerName, socketId: socket.id});
             }
