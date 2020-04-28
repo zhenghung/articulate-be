@@ -14,6 +14,7 @@
     "express": "^4.17.1",
     "node": "12.14.x",
     "shortid": "^2.2.15",
+    "soba-be": "github:zhenghung/soba-be",
     "socket.io": "2.1.1"
   },
   "devDependencies": {
