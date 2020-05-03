@@ -49,6 +49,8 @@ const GenerateGameState = (
         currentState: 'lobby',
         teams: teams,
         turns: 0,
+        gameOver: false,
+        winner: -1,
         usedWords,
         currentTurn,
         gamePositions
