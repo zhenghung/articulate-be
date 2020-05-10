@@ -1,3 +1,12 @@
+/** Generate random RoomCode */
+const RandomRoomCode = function(codeLength) {
+    let roomCode = '';
+    for (let i = 0; i < codeLength; i++) {
+        roomCode += (String.fromCharCode(RandomInt(0, 26) + 65));
+    }
+    return roomCode
+};
+
 /** Gets a random property from the given object*/
 const RandomProperty = function(obj) {
     const keys = Object.keys(obj);
@@ -25,4 +34,4 @@ const FilterDictionary = function(words, usedWords) {
     return wordsCopy;
 };
 
-module.exports = {RandomProperty, RandomInt, FilterDictionary};
+module.exports = {RandomRoomCode, RandomProperty, RandomInt, FilterDictionary};

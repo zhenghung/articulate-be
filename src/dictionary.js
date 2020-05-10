@@ -1,43 +1,17 @@
+let actionWords = require('./words/action.json');
+let natureWords = require('./words/nature.json');
+let objectWords = require('./words/object.json');
+let personWords = require('./words/person.json');
+let randomWords = require('./words/random.json');
+let worldWords = require('./words/world.json');
+
 const words = {
-    'object': [
-        'Catalogue',
-        'Humidifier',
-        'Dent',
-        'Password',
-    ],
-    'action': [
-        'Sampling',
-        'Proposing',
-        'Wrestling',
-        'Surfing',
-    ],
-    'nature': [
-        'Tulip',
-        'Orchid',
-    ],
-    'world': [
-        'Costa Rica',
-    ],
-    'person': [
-        'Keanu Reeves',
-        'Reese Witherspoon',
-        'Gru',
-        'Superman',
-        'Harry Potter',
-        'Barack Obama',
-        'Kate Moss',
-    ],
-    'random': [
-        'Wedge',
-        'Chance',
-        'Data',
-        'Itch',
-        'Ransack',
-        'Jester',
-        'Owner',
-        'Silhouette',
-        'deja vu',
-    ],
+    'object': objectWords,
+    'action': actionWords,
+    'nature': natureWords,
+    'world': worldWords,
+    'person': personWords,
+    'random': randomWords,
 };
 
-module.exports = {words};
+module.exports = words;

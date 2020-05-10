@@ -1,5 +1,5 @@
 const shortid = require('shortid');
-const {RandomInt} = require('./util');
+const {RandomRoomCode} = require('./util');
 
 /**
  * Generates a starting boilerplate gameState based on the parameters passed in
@@ -12,7 +12,7 @@ const GenerateGameState = (
     {host, numberOfTeams},
 ) => {
     // const roomCode = shortid.generate();
-    const roomCode = RandomInt(100, 999).toString();
+    const roomCode = RandomRoomCode(4).toString();
     let teams = [];
     for (let i = 0; i < numberOfTeams; i++) {
         teams.push([]);
