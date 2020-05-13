@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {words} = require('./dictionary');
+const words = require('./dictionary');
 const {RandomProperty, FilterDictionary} = require('./util');
 const {GenerateGameState} = require('./gamemanager');
 
